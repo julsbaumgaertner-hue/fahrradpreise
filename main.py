@@ -27,6 +27,7 @@ import yaml
 from rich.console import Console
 from rich.table import Table
 
+from matcher import ist_rahmen_only
 from sources.base import Listing, ScraperBlocked
 from sources.kleinanzeigen import KleinanzeigenSource
 from sources.bikemarkt import BikemarktSource
@@ -120,7 +121,11 @@ def quellen_abfragen(modell: dict) -> list[Listing]:
                 match_boost=modell["match_boost"],
                 min_score=modell["min_score"],
             )
-            console.print(f"   {len(treffer)} passende Treffer bei {source.name}")
+            vor_rahmenfilter = len(treffer)
+            treffer = [t for t in treffer if not ist_rahmen_only(t.title)]
+            rahmen_only = vor_rahmenfilter - len(treffer)
+            hinweis = f" ({rahmen_only} Rahmen-only rausgefiltert)" if rahmen_only else ""
+            console.print(f"   {len(treffer)} passende Treffer bei {source.name}{hinweis}")
             alle_treffer.extend(treffer)
         except ScraperBlocked as e:
             console.print(f"   [yellow]{source.name} blockt gerade: {e}[/yellow]")

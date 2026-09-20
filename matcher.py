@@ -52,6 +52,29 @@ def guess_color(title: str) -> str | None:
             return label
     return None
 
+# Erkennt Rahmen-only-Angebote (keine kompletten Raeder) an eindeutigen
+# Signalwoertern. Bewusst eng gehalten: eine breite Zubehoer-Keywordliste
+# (Schloss, Helm, Licht, ...) wurde live gegen die echten 933 Treffer
+# getestet und produzierte Fehltreffer - z.B. "Focus JAM SL 8.7 ... +
+# Schloss" ist ein kompletter Bike-Verkauf, bei dem nur ein Schloss als
+# Zugabe erwaehnt wird, kein Zubehoer-Einzelangebot. "\brahmen\b" matcht
+# wegen der Wortgrenze NICHT auf zusammengesetzte Woerter wie
+# "Rahmengroesse" oder "Rahmennummer" (kein Leerzeichen davor/danach im
+# Deutschen), nur auf das eigenstaendige Wort "Rahmen".
+_RAHMEN_ONLY_MUSTER = re.compile(
+    r"\bframeset\b|\brahmenkit\b|\brahmenset\b|\bhauptrahmen\b"
+    r"|^rahmen\b|\bnur\s+(?:der\s+)?rahmen\b|\brahmen\s+only\b",
+    re.IGNORECASE,
+)
+
+
+def ist_rahmen_only(title: str) -> bool:
+    """True, wenn der Titel eindeutig ein Rahmen-only-Angebot ist (kein
+    komplettes Rad) - siehe Kommentar oben zur Begruendung der engen
+    Muster."""
+    return bool(_RAHMEN_ONLY_MUSTER.search(title))
+
+
 REQUIRED_THRESHOLD = 75  # ab hier gilt ein Pflicht-Token als "im Titel enthalten"
 BOOST_THRESHOLD = 75
 BASE_SCORE = 50
