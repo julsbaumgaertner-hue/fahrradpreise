@@ -10,7 +10,12 @@ Struktur echt gegen die Live-Seite geprueft (Stand 2026-09-20):
   Jedes Item hat "name", "_url" (Pfad relativ zur Domain), und
   "variants"[0] mit "price" (centAmount/currencyCode) und
   "attributes.condition_optical" (deutscher Klartext: "Sehr Gut",
-  "Gut", "In Ordnung", ...).
+  "Gut", "In Ordnung", ...). Rahmengroesse steckt strukturiert in
+  "attributes.frame_height_manufacturer" (S/M/L/XL, gegen echte Treffer
+  verifiziert) - kein Text-Raten wie bei kleinanzeigen/bikemarkt noetig.
+  Ein Gewichtsfeld gibt es in den >90 Attributen dagegen nicht (live
+  geprueft) - daher wie bei den anderen Quellen nur Best-Effort aus dem
+  Titel, der bei jobrad-loop aber praktisch nie ein Gewicht enthaelt.
 - __master.total kann weit ueber der Anzahl der zurueckgegebenen "items"
   liegen (Server liefert nur eine erste Seite, z.B. 24 von 303) - die
   Suche ist eine lockere OR-Verknuepfung ueber alle Suchbegriffe und wird
@@ -45,6 +50,12 @@ _NEXT_DATA_MUSTER = re.compile(
     r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', re.DOTALL
 )
 _JAHR_MUSTER = re.compile(r"\b(20[12]\d)\b")
+_GEWICHT_MUSTER = re.compile(r"(\d{1,2}[,.]\d{1,2})\s*kg", re.IGNORECASE)
+
+
+def _gewicht_parsen(title: str) -> float | None:
+    m = _GEWICHT_MUSTER.search(title)
+    return float(m.group(1).replace(",", ".")) if m else None
 
 _ZUSTAND_MUSTER = {
     "neu": re.compile(r"\bneu\b|neuwertig", re.IGNORECASE),
@@ -105,9 +116,9 @@ class JobradSource(Source):
             else None
         )
 
-        condition_text = (variant.get("attributes") or {}).get(
-            "condition_optical", [None]
-        )[0]
+        attributes = variant.get("attributes") or {}
+        condition_text = attributes.get("condition_optical", [None])[0]
+        frame_size = attributes.get("frame_height_manufacturer", [None])[0]
 
         jahr_match = _JAHR_MUSTER.search(title)
 
@@ -119,8 +130,9 @@ class JobradSource(Source):
             url=BASE_URL + url_pfad,
             location=None,
             date_text=None,
-            frame_size=None,
+            frame_size=frame_size,
             model_year=jahr_match.group(1) if jahr_match else None,
+            weight_kg=_gewicht_parsen(title),
         )
 
     def _search_one_term(self, term: str) -> list[Listing]:

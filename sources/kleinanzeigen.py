@@ -41,6 +41,7 @@ HEADERS = {
 _PREIS_MUSTER = re.compile(r"([\d.]+)\s*€")
 _JAHR_MUSTER = re.compile(r"\b(20[12]\d)\b")
 _GROESSE_MUSTER = re.compile(r"\bGr\.?\s*([SMLX]{1,3})\b", re.IGNORECASE)
+_GEWICHT_MUSTER = re.compile(r"(\d{1,2}[,.]\d{1,2})\s*kg", re.IGNORECASE)
 _ZUSTAND_MUSTER = {
     "refurbished": re.compile(r"refurbish|generalÃ¼berholt|generaluberholt|aufbereitet", re.IGNORECASE),
     "neu": re.compile(r"\bneu\b|neuwertig|originalverpackt|\bovp\b", re.IGNORECASE),
@@ -55,6 +56,11 @@ def _preis_parsen(text: str | None) -> float | None:
     if not m:
         return None
     return float(m.group(1).replace(".", ""))
+
+
+def _gewicht_parsen(title: str) -> float | None:
+    m = _GEWICHT_MUSTER.search(title)
+    return float(m.group(1).replace(",", ".")) if m else None
 
 
 def _zustand_erraten(*texte: str | None) -> str:
@@ -126,6 +132,7 @@ class KleinanzeigenSource(Source):
             date_text=date_text,
             frame_size=groesse_match.group(1).upper() if groesse_match else None,
             model_year=jahr_match.group(1) if jahr_match else None,
+            weight_kg=_gewicht_parsen(title),
         )
 
     def _search_one_term(self, term: str) -> list[Listing]:

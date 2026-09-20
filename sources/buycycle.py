@@ -28,6 +28,7 @@ Struktur echt gegen die Live-Seite geprueft (Stand 2026-09-20):
 
 from __future__ import annotations
 
+import re
 import time
 
 import requests
@@ -55,6 +56,15 @@ _ZUSTAND_CODES = {
     "3": "gebraucht",  # Sehr gut
     "4": "neu",  # Neu
 }
+
+# buycycle liefert kein strukturiertes Gewichtsfeld - nur bestenfalls aus dem
+# Titel, wenn ein Verkaeufer es selbst reinschreibt.
+_GEWICHT_MUSTER = re.compile(r"(\d{1,2}[,.]\d{1,2})\s*kg", re.IGNORECASE)
+
+
+def _gewicht_parsen(title: str) -> float | None:
+    m = _GEWICHT_MUSTER.search(title)
+    return float(m.group(1).replace(",", ".")) if m else None
 
 
 class BuycycleSource(Source):
@@ -108,6 +118,7 @@ class BuycycleSource(Source):
             date_text=None,
             frame_size=d.get("frame_size_in_string") or d.get("product_size"),
             model_year=str(d.get("year")) if d.get("year") else None,
+            weight_kg=_gewicht_parsen(title),
         )
 
     def search(

@@ -42,6 +42,7 @@ HEADERS = {
 _PREIS_MUSTER = re.compile(r"([\d.]+),\d{2}\s*€")
 _JAHR_MUSTER = re.compile(r"\b(20[12]\d)\b")
 _GROESSE_MUSTER = re.compile(r"\bGr\.?\s*([SMLX]{1,3})\b", re.IGNORECASE)
+_GEWICHT_MUSTER = re.compile(r"(\d{1,2}[,.]\d{1,2})\s*kg", re.IGNORECASE)
 
 # bikemarkt hat (anders als kleinanzeigen.de) ein echtes Zustands-Tag in der
 # Meta-Zeile - direkter Abgleich statt Text-Heuristik ueber die Beschreibung.
@@ -60,6 +61,11 @@ def _preis_parsen(text: str | None) -> float | None:
     if not m:
         return None
     return float(m.group(1).replace(".", ""))
+
+
+def _gewicht_parsen(title: str) -> float | None:
+    m = _GEWICHT_MUSTER.search(title)
+    return float(m.group(1).replace(",", ".")) if m else None
 
 
 class BikemarktSource(Source):
@@ -122,6 +128,7 @@ class BikemarktSource(Source):
             date_text=date_text,
             frame_size=groesse_match.group(1).upper() if groesse_match else None,
             model_year=jahr_match.group(1) if jahr_match else None,
+            weight_kg=_gewicht_parsen(title),
         )
 
     def _search_one_term(self, term: str) -> list[Listing]:

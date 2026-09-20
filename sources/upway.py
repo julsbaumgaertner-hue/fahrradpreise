@@ -55,6 +55,14 @@ _DETAIL_MUSTER = re.compile(
 )
 _DETAIL_WINDOW = 1200  # Zeichen nach dem Handle-Treffer, in denen das Detail-Muster gesucht wird
 _JAHR_MUSTER = re.compile(r"\b(20[12]\d)\b")
+# upway liefert kein strukturiertes Gewichtsfeld im Such-Payload - nur
+# bestenfalls aus dem Titel, wenn dort mal ein Gewicht steht.
+_GEWICHT_MUSTER = re.compile(r"(\d{1,2}[,.]\d{1,2})\s*kg", re.IGNORECASE)
+
+
+def _gewicht_parsen(title: str) -> float | None:
+    m = _GEWICHT_MUSTER.search(title)
+    return float(m.group(1).replace(",", ".")) if m else None
 
 
 class UpwaySource(Source):
@@ -104,6 +112,7 @@ class UpwaySource(Source):
                     date_text=None,
                     frame_size=None,
                     model_year=jahr_match.group(1) if jahr_match else None,
+                    weight_kg=_gewicht_parsen(title),
                 )
             )
         return treffer
