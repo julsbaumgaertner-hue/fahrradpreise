@@ -37,6 +37,7 @@ from sources.moehrle import MoehrleSource
 from sources.mtbmania import MtbManiaSource
 from sources.rebike import RebikeSource
 from sources.bike2future import Bike2FutureSource
+from sources.statera import StateraSource
 
 REPO = Path(__file__).parent
 CONFIG_PATH = REPO / "config" / "models.yaml"
@@ -54,6 +55,7 @@ SOURCES = [
     MtbManiaSource(),
     RebikeSource(),
     Bike2FutureSource(),
+    StateraSource(),
 ]
 
 console = Console()
