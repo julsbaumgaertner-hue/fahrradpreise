@@ -24,7 +24,8 @@ class Listing:
     date_text: str | None = None  # Datum als Rohtext vom Inserat, nicht geparst
     frame_size: str | None = None
     model_year: str | None = None
-    weight_kg: float | None = None  # nur wenn im Titel/den Herstellerdaten angegeben - meist leer
+    weight_kg: float | None = None  # echte Angabe des Verkaeufers im Titel - meist leer
+    weight_est_kg: float | None = None  # Schaetzwert aus config/weight_reference.yaml, siehe main.py
     match_score: float | None = None
 
 

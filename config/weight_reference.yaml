@@ -1,0 +1,51 @@
+# Herstellerseitige Referenzgewichte - nur Eintraege, die live auf der
+# offiziellen Hersteller-Spezifikationsseite bestaetigt wurden (kein
+# Google-Snippet, kein Haendler-Kopie, keine falsche Ausstattungsvariante).
+# Bei der Recherche (20.09.2026) hatten die meisten Marken KEINE
+# groessenaufgeschluesselte Gewichtstabelle, sondern nur einen einzelnen
+# Wert fuer eine nicht naeher spezifizierte Standardgroesse - deshalb ist
+# frame_size hier oft null. Mehrere Modelle (Simplon Rapcon Pmax SX, Trek
+# Fuel EXe, Haibike Lyke CF, Bulls Sonic EVO AM SX-i, Specialized Turbo
+# Levo SL, Santa Cruz Heckler SL, Mondraker Neat, Scott Lumen eRIDE, Orbea
+# Rise, sowie Cube AMS Hybrid ONE44 in der exakt getrackten Race-Variante)
+# hatten KEINEN belastbaren Wert und fehlen hier bewusst, statt einen
+# unsicheren Wert einzutragen.
+#
+# Wird in main.py als weight_est_kg genutzt, wenn ein einzelnes Angebot
+# selbst kein Gewicht nennt (weight_kg bleibt dann trotzdem null - die
+# beiden Felder werden nie vermischt, siehe sources/base.py).
+#
+# frame_size: null = gilt pauschal fuers ganze Modell (keine
+#   groessenspezifische Herstellerangabe verfuegbar). Ein gesetzter Wert
+#   (z.B. "L") wird nur auf Angebote mit exakt dieser frame_size angewendet.
+
+models:
+  - model_id: ktm-macina-scarp-sx
+    weight_kg: 19.1
+    frame_size: L
+    note: "48cm laut Hersteller entspricht Groesse L"
+    source: "ktm-bikes.at, offizielle Spezifikationsseite, geprueft 20.09.2026"
+
+  - model_id: rotwild-rx275
+    weight_kg: 15.9
+    frame_size: L
+    note: "Pro-Ausstattung; Hersteller nennt zusaetzlich Einzelkomponenten (Rahmen 1893g, Akku 1400g, Motor TQ HPR50 1850g)"
+    source: "rotwild.com/en/r.x275-pro/20461, geprueft 20.09.2026"
+
+  - model_id: canyon-neuron-onfly-cf
+    weight_kg: 20.1
+    frame_size: null
+    note: "CF 8, Herstellerangabe ohne Groessenaufschluesselung"
+    source: "canyon.com, offizielle Spezifikationsseite, geprueft 20.09.2026"
+
+  - model_id: canyon-spectral-onfly-cf
+    weight_kg: 18.9
+    frame_size: null
+    note: "CF 8, Herstellerangabe ohne Groessenaufschluesselung"
+    source: "canyon.com, offizielle Spezifikationsseite, geprueft 20.09.2026"
+
+  - model_id: focus-jam2-sl
+    weight_kg: 20.2
+    frame_size: null
+    note: "430Wh-Akku-Variante, Herstellerangabe ohne Groessenaufschluesselung"
+    source: "focus-bikes.com, offizielle Spezifikationsseite, geprueft 20.09.2026"

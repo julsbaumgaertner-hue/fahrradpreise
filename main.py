@@ -43,6 +43,7 @@ from sources.bikeflip import BikeflipSource
 
 REPO = Path(__file__).parent
 CONFIG_PATH = REPO / "config" / "models.yaml"
+WEIGHT_REFERENCE_PATH = REPO / "config" / "weight_reference.yaml"
 RESULTS_DIR = REPO / "results"
 
 # Jede Quelle hier eintragen, sobald ihr Modul steht - main.py ruft sie alle
@@ -68,6 +69,35 @@ console = Console()
 def modelle_laden() -> list[dict]:
     with open(CONFIG_PATH, encoding="utf-8") as f:
         return yaml.safe_load(f)["models"]
+
+
+def gewichtsreferenz_laden() -> dict[str, dict]:
+    """model_id -> {weight_kg, frame_size} - siehe config/weight_reference.yaml
+    fuer die Herkunft und warum hier nur eine Handvoll Modelle drinstehen."""
+    if not WEIGHT_REFERENCE_PATH.exists():
+        return {}
+    with open(WEIGHT_REFERENCE_PATH, encoding="utf-8") as f:
+        eintraege = yaml.safe_load(f)["models"]
+    return {e["model_id"]: e for e in eintraege}
+
+
+def gewicht_schaetzen(treffer: list[Listing], modell_id: str, referenz: dict[str, dict]) -> None:
+    """Setzt weight_est_kg auf Angeboten ohne eigene weight_kg-Angabe, wenn
+    fuer dieses Modell ein bestaetigter Referenzwert existiert. Aendert
+    weight_kg nie - echte Verkaeufer-Angabe und Herstellerschaetzung bleiben
+    strikt getrennt."""
+    eintrag = referenz.get(modell_id)
+    if not eintrag:
+        return
+
+    referenz_groesse = eintrag.get("frame_size")
+    for t in treffer:
+        if t.weight_kg is not None:
+            continue
+        if referenz_groesse is not None:
+            if not t.frame_size or t.frame_size.upper() != str(referenz_groesse).upper():
+                continue
+        t.weight_est_kg = eintrag["weight_kg"]
 
 
 def modell_finden(modelle: list[dict], modell_id: str) -> dict:
@@ -165,6 +195,7 @@ def main() -> None:
     console.print(f"[bold]Suche: {modell['display_name']}[/bold]\n")
 
     treffer = quellen_abfragen(modell)
+    gewicht_schaetzen(treffer, modell["id"], gewichtsreferenz_laden())
     console.print()
     tabelle_ausgeben(treffer)
 
