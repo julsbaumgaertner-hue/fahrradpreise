@@ -10,10 +10,15 @@ Struktur echt gegen die Live-Seite geprueft (Stand 2026-09-20):
   "prod"-Search-Key. Das ist ein regulaerer client-seitiger Read-only-Key
   (identisch zu dem, den jeder Browser beim Seitenaufruf mitschickt), kein
   Auth-Bypass.
-- Endpoint: https://ac.cnstrc.com/search/<query>?key=...&filters[brand_slug]=cube&filters[main-type]=bikes
-  Ohne Marken-/Typ-Filter liefert die Volltextsuche auch branchenfremde
-  Treffer (Schuhe, Schlaeger etc.) ueber Embedding-Matching - Filter sind
-  daher kein Nice-to-have, sondern noetig fuer sinnvolle Treffer.
+- Endpoint: https://ac.cnstrc.com/search/<query>?key=...&filters[main-type]=bikes
+  Ganz ohne Filter liefert die Volltextsuche auch branchenfremde Treffer
+  (Schuhe, Schlaeger etc.) ueber Embedding-Matching - der main-type-Filter
+  raeumt das weg. Urspruenglich stand hier zusaetzlich ein hart codierter
+  filters[brand_slug]=cube - das hat beim ersten Modell (Cube) nicht
+  aufgefallen, aber jede andere Marke (Trek, Canyon, ...) stumm auf 0
+  Treffer gesetzt. Jetzt uebernimmt score_title() unten die komplette
+  Relevanzpruefung ueber match_required/match_boost, kein serverseitiger
+  Markenfilter mehr noetig.
 - Titel steht im Feld "value", nicht in "data" (dort gibt es keine
   eigene title-Property fuer bikes).
 - Preise sind pro Angebot in unterschiedlicher Waehrung hinterlegt
@@ -82,7 +87,6 @@ class BuycycleSource(Source):
             "s": "1",
             "c": "ciojs-client-2.0.0",
             "section": "Products",
-            "filters[brand_slug]": "cube",
             "filters[main-type]": "bikes",
             "num_results_per_page": RESULTS_PER_PAGE,
         }
@@ -97,10 +101,19 @@ class BuycycleSource(Source):
 
     def _parse_result(self, res: dict) -> Listing | None:
         d = res.get("data", {})
-        title = res.get("value")
+        value = res.get("value")
         url = d.get("url")
-        if not title or not url:
+        if not value or not url:
             return None
+
+        # "value" ist nur der Modellname, die Marke steckt separat in
+        # brand_name - bei manchen Angeboten (z.B. Cube) stand die Marke
+        # bereits im Modellnamen mit drin, bei anderen (z.B. Trek: "Fuel
+        # EXe 9.9 XTR") komplett nicht. Ohne die Marke voranzustellen
+        # wuerde match_required (das die Marke immer verlangt) alles ohne
+        # Marke im Titel verwerfen. Live geprueft an "Trek Fuel EXe".
+        brand = (d.get("brand_name") or "").strip()
+        title = f"{brand} {value}".strip() if brand and not value.lower().startswith(brand.lower()) else value
 
         currency = d.get("currency_code")
         price = d.get("price")

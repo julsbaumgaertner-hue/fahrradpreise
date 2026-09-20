@@ -35,3 +35,215 @@ models:
       - "400x"
       - "440x"
     min_score: 55
+
+  # Ab hier: vergleichbare Light-E-MTBs (Bosch SX/TQ HPR50/Fazua Ride 60 o.ae.,
+  # ~18-20kg statt Full-Power-Fully mit 23-26kg) zum Cube AMS Hybrid ONE44 oben,
+  # um Preise ueber Marken hinweg vergleichen zu koennen. Bei Marken, die den
+  # gleichen Modellnamen auch fuer eine nicht-elektrische oder Full-Power-
+  # Variante verwenden, steht das unterscheidende Suffix (onfly/exe/sl/...) als
+  # EIGENES match_required-Token, nicht an den Modellnamen angehaengt - ein
+  # kurzes eigenstaendiges Token trennt fuzzy zuverlaessiger als ein
+  # zusammengesetztes (z.B. "exe" statt "fuel exe" gegen "Trek Fuel EX" ohne e).
+
+  - id: canyon-neuron-onfly-cf
+    display_name: "Canyon Neuron:ONfly CF"
+    search_terms:
+      - "Canyon Neuron ONfly"
+      - "Canyon Neuron:ONfly CF"
+      - "Canyon Neuron ONfly CF"
+    match_required:
+      - canyon
+      - neuron
+      - onfly
+    match_boost:
+      - cf
+      - carbon
+    min_score: 55
+
+  - id: ktm-macina-scarp-sx
+    display_name: "KTM Macina Scarp SX"
+    search_terms:
+      - "KTM Macina Scarp SX"
+      - "KTM Macina Scarp"
+      - "KTM Macina Prowler SX"
+    match_required:
+      - ktm
+      - macina
+      - scarp
+    match_boost:
+      - sx
+      - prowler
+    min_score: 55
+
+  - id: bulls-sonic-evo-am-sx
+    display_name: "Bulls Sonic EVO AM SX-i"
+    search_terms:
+      - "Bulls Sonic EVO AM"
+      - "Bulls Sonic EVO AM SX-i"
+      - "Bulls Sonic EVO"
+    match_required:
+      - bulls
+      - sonic
+      - evo
+    match_boost:
+      - am
+      - "sx-i"
+      - sxi
+    min_score: 55
+
+  - id: flyer-uproc-slx
+    display_name: "Flyer Uproc SL:X"
+    search_terms:
+      - "Flyer Uproc SLX"
+      - "Flyer Uproc SL:X"
+      - "Flyer Uproc"
+    match_required:
+      - flyer
+      - uproc
+      - slx
+    match_boost: []
+    min_score: 50
+
+  - id: simplon-rapcon-pmax-sx
+    display_name: "Simplon Rapcon Pmax SX"
+    search_terms:
+      - "Simplon Rapcon Pmax"
+      - "Simplon Rapcon Pmax SX"
+      - "Simplon Rapcon"
+    match_required:
+      - simplon
+      - rapcon
+    match_boost:
+      - pmax
+      - sx
+    min_score: 55
+
+  - id: trek-fuel-exe
+    display_name: "Trek Fuel EXe"
+    search_terms:
+      - "Trek Fuel EXe"
+      - "Trek Fuel EX-e"
+    match_required:
+      - trek
+      - fuel
+      - exe
+    match_boost: []
+    min_score: 50
+
+  - id: specialized-turbo-levo-sl
+    display_name: "Specialized Turbo Levo SL"
+    search_terms:
+      - "Specialized Turbo Levo SL"
+      - "Specialized Levo SL"
+    match_required:
+      - specialized
+      - levo
+      - sl
+    match_boost:
+      - turbo
+      - carbon
+    min_score: 55
+
+  - id: canyon-spectral-onfly-cf
+    display_name: "Canyon Spectral:ONfly CF"
+    search_terms:
+      - "Canyon Spectral ONfly"
+      - "Canyon Spectral:ONfly CF"
+      - "Canyon Spectral ONfly CF"
+    match_required:
+      - canyon
+      - spectral
+      - onfly
+    match_boost:
+      - cf
+      - carbon
+    min_score: 55
+
+  - id: focus-jam2-sl
+    display_name: "Focus JAM² SL"
+    search_terms:
+      - "Focus JAM2 SL"
+      - "Focus JAM SL"
+      - "Focus Jam² SL"
+    match_required:
+      - focus
+      - jam
+      - sl
+    match_boost:
+      - "jam2"
+    min_score: 55
+
+  - id: santa-cruz-heckler-sl
+    display_name: "Santa Cruz Heckler SL"
+    search_terms:
+      - "Santa Cruz Heckler SL"
+    match_required:
+      - cruz
+      - heckler
+      - sl
+    match_boost:
+      - santa
+      - carbon
+      - cc
+    min_score: 55
+
+  - id: haibike-lyke-cf
+    display_name: "Haibike Lyke CF"
+    search_terms:
+      - "Haibike Lyke"
+      - "Haibike Lyke CF"
+    match_required:
+      - haibike
+      - lyke
+    match_boost:
+      - cf
+      - carbon
+    min_score: 55
+
+  - id: mondraker-neat
+    display_name: "Mondraker Neat"
+    search_terms:
+      - "Mondraker Neat"
+    match_required:
+      - mondraker
+      - neat
+    match_boost: []
+    min_score: 50
+
+  - id: scott-lumen-eride
+    display_name: "Scott Lumen eRIDE"
+    search_terms:
+      - "Scott Lumen eRIDE"
+      - "Scott Lumen"
+    match_required:
+      - scott
+      - lumen
+    match_boost:
+      - eride
+    min_score: 55
+
+  - id: orbea-rise
+    display_name: "Orbea Rise"
+    search_terms:
+      - "Orbea Rise SL"
+      - "Orbea Rise Gen3"
+      - "Orbea Rise"
+    match_required:
+      - orbea
+      - rise
+    match_boost:
+      - sl
+      - gen3
+    min_score: 55
+
+  - id: rotwild-rx275
+    display_name: "Rotwild R.X275"
+    search_terms:
+      - "Rotwild RX275"
+      - "Rotwild R.X275"
+      - "Rotwild R.X 275"
+    match_required:
+      - rotwild
+      - x275
+    match_boost: []
+    min_score: 50
