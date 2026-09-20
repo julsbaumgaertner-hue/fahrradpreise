@@ -59,11 +59,23 @@ def guess_color(title: str) -> str | None:
 # Schloss" ist ein kompletter Bike-Verkauf, bei dem nur ein Schloss als
 # Zugabe erwaehnt wird, kein Zubehoer-Einzelangebot. "\brahmen\b" matcht
 # wegen der Wortgrenze NICHT auf zusammengesetzte Woerter wie
-# "Rahmengroesse" oder "Rahmennummer" (kein Leerzeichen davor/danach im
-# Deutschen), nur auf das eigenstaendige Wort "Rahmen".
+# "Rahmengroesse" oder "Rahmennummer"/"Carbonrahmen" (kein Leerzeichen
+# davor/danach im Deutschen), nur auf das eigenstaendige Wort "Rahmen".
+#
+# Zweiter Fall (per Screenshot vom Nutzer gefunden: "Scott LUMEN Eride
+# 900SL Carbon Rahmen Größe S" wurde NICHT erfasst): Verkaeufer schreiben
+# das eigenstaendige Wort "Rahmen" oft mitten im Titel direkt neben der
+# Rahmengroesse ("XL Rahmen", "Rahmen L", "Rahmen Größe S") - live gegen
+# die echten 924 damaligen Treffer geprueft: 6 weitere Faelle gefunden,
+# alle echte Rahmen-only-Angebote, keine neuen Fehltreffer gegen bekannte
+# komplette Bike-Titel (inkl. "Carbonrahmen"-Erwaehnungen, "Gr. M (...)"-
+# Groessenangaben ohne "Rahmen" in der Naehe).
+_GROESSEN_TOKEN = r"(?:XXS|XS|S|M|L|XL|XXL)"
 _RAHMEN_ONLY_MUSTER = re.compile(
     r"\bframeset\b|\brahmenkit\b|\brahmenset\b|\bhauptrahmen\b"
-    r"|^rahmen\b|\bnur\s+(?:der\s+)?rahmen\b|\brahmen\s+only\b",
+    r"|^rahmen\b|\bnur\s+(?:der\s+)?rahmen\b|\brahmen\s+only\b"
+    rf"|\b{_GROESSEN_TOKEN}\b[\s\W]{{0,4}}\brahmen\b"
+    rf"|\brahmen\b[\s\W]{{0,15}}(?:gr\.?|größe|groesse|grosse)?[\s\W]{{0,4}}\b{_GROESSEN_TOKEN}\b",
     re.IGNORECASE,
 )
 
