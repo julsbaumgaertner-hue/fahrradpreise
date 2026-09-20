@@ -28,7 +28,7 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
-from matcher import score_title
+from matcher import guess_color, score_title
 from sources.base import Listing, ScraperBlocked, Source
 
 BASE_URL = "https://www.bikemove.de"
@@ -102,6 +102,7 @@ class BikemoveSource(Source):
             date_text=None,
             frame_size=_groesse_erraten(title),
             model_year=jahr_match.group(1) if jahr_match else None,
+            color=guess_color(title),
         )
 
     def _search_one_term(self, term: str) -> list[Listing]:

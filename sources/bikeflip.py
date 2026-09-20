@@ -41,7 +41,7 @@ import time
 
 import requests
 
-from matcher import score_title
+from matcher import guess_color, score_title
 from sources.base import Listing, ScraperBlocked, Source
 
 BASE_URL = "https://www.bikeflip.com"
@@ -136,6 +136,7 @@ class BikeflipSource(Source):
             date_text=None,
             frame_size=frame_size,
             model_year=str(item["model_year"]) if item.get("model_year") else None,
+            color=guess_color(title),
         )
 
     def _bestand_fuer_marke(self, brand_id: int) -> list[Listing]:

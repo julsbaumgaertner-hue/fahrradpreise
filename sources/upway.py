@@ -32,7 +32,7 @@ import time
 
 import requests
 
-from matcher import score_title
+from matcher import guess_color, score_title
 from sources.base import Listing, ScraperBlocked, Source
 
 BASE_URL = "https://upway.de"
@@ -113,6 +113,7 @@ class UpwaySource(Source):
                     frame_size=None,
                     model_year=jahr_match.group(1) if jahr_match else None,
                     weight_kg=_gewicht_parsen(title),
+                    color=guess_color(title),
                 )
             )
         return treffer

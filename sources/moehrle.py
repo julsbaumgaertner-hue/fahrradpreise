@@ -26,7 +26,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from matcher import score_title
+from matcher import guess_color, score_title
 from sources.base import Listing, ScraperBlocked, Source
 
 BASE_URL = "https://www.moehrle-bikes.com"
@@ -120,6 +120,7 @@ class MoehrleSource(Source):
                 frame_size=groesse_match.group(1).upper() if groesse_match else None,
                 model_year=jahr_match.group(1) if jahr_match else None,
                 weight_kg=float(gewicht_match.group(1).replace(",", ".")) if gewicht_match else None,
+                color=guess_color(title),
             )
 
             if match_required is not None:

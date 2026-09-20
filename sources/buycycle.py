@@ -38,7 +38,7 @@ import time
 
 import requests
 
-from matcher import score_title
+from matcher import guess_color, score_title
 from sources.base import Listing, ScraperBlocked, Source
 
 SEARCH_URL = "https://ac.cnstrc.com/search/{query}"
@@ -132,6 +132,7 @@ class BuycycleSource(Source):
             frame_size=d.get("frame_size_in_string") or d.get("product_size"),
             model_year=str(d.get("year")) if d.get("year") else None,
             weight_kg=_gewicht_parsen(title),
+            color=guess_color(title),
         )
 
     def search(

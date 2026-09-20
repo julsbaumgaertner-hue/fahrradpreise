@@ -26,6 +26,7 @@ class Listing:
     model_year: str | None = None
     weight_kg: float | None = None  # echte Angabe des Verkaeufers im Titel - meist leer
     weight_est_kg: float | None = None  # Schaetzwert aus config/weight_reference.yaml, siehe main.py
+    color: str | None = None  # strukturiert wo vorhanden, sonst matcher.guess_color() aus dem Titel
     match_score: float | None = None
 
 

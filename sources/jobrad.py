@@ -33,7 +33,7 @@ import time
 
 import requests
 
-from matcher import score_title
+from matcher import guess_color, score_title
 from sources.base import Listing, ScraperBlocked, Source
 
 BASE_URL = "https://jobrad-loop.com"
@@ -119,6 +119,7 @@ class JobradSource(Source):
         attributes = variant.get("attributes") or {}
         condition_text = attributes.get("condition_optical", [None])[0]
         frame_size = attributes.get("frame_height_manufacturer", [None])[0]
+        color = attributes.get("color", [None])[0] or guess_color(title)
 
         jahr_match = _JAHR_MUSTER.search(title)
 
@@ -133,6 +134,7 @@ class JobradSource(Source):
             frame_size=frame_size,
             model_year=jahr_match.group(1) if jahr_match else None,
             weight_kg=_gewicht_parsen(title),
+            color=color,
         )
 
     def _search_one_term(self, term: str) -> list[Listing]:
