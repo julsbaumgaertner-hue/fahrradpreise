@@ -41,6 +41,7 @@ from sources.bike2future import Bike2FutureSource
 from sources.statera import StateraSource
 from sources.bikemove import BikemoveSource
 from sources.bikeflip import BikeflipSource
+from sources.cleverbikes import CleverbikesSource
 
 REPO = Path(__file__).parent
 CONFIG_PATH = REPO / "config" / "models.yaml"
@@ -62,6 +63,7 @@ SOURCES = [
     StateraSource(),
     BikemoveSource(),
     BikeflipSource(),
+    CleverbikesSource(),
 ]
 
 console = Console()
