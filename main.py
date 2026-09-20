@@ -39,6 +39,7 @@ from sources.rebike import RebikeSource
 from sources.bike2future import Bike2FutureSource
 from sources.statera import StateraSource
 from sources.bikemove import BikemoveSource
+from sources.bikeflip import BikeflipSource
 
 REPO = Path(__file__).parent
 CONFIG_PATH = REPO / "config" / "models.yaml"
@@ -58,6 +59,7 @@ SOURCES = [
     Bike2FutureSource(),
     StateraSource(),
     BikemoveSource(),
+    BikeflipSource(),
 ]
 
 console = Console()
