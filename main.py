@@ -31,6 +31,7 @@ from sources.base import Listing, ScraperBlocked
 from sources.kleinanzeigen import KleinanzeigenSource
 from sources.bikemarkt import BikemarktSource
 from sources.buycycle import BuycycleSource
+from sources.upway import UpwaySource
 
 REPO = Path(__file__).parent
 CONFIG_PATH = REPO / "config" / "models.yaml"
@@ -42,6 +43,7 @@ SOURCES = [
     KleinanzeigenSource(),
     BikemarktSource(),
     BuycycleSource(),
+    UpwaySource(),
 ]
 
 console = Console()
