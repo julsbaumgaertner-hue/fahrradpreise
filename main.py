@@ -30,6 +30,7 @@ from rich.table import Table
 from sources.base import Listing, ScraperBlocked
 from sources.kleinanzeigen import KleinanzeigenSource
 from sources.bikemarkt import BikemarktSource
+from sources.buycycle import BuycycleSource
 
 REPO = Path(__file__).parent
 CONFIG_PATH = REPO / "config" / "models.yaml"
@@ -40,6 +41,7 @@ RESULTS_DIR = REPO / "results"
 SOURCES = [
     KleinanzeigenSource(),
     BikemarktSource(),
+    BuycycleSource(),
 ]
 
 console = Console()
