@@ -1,51 +1,140 @@
-# Herstellerseitige Referenzgewichte - nur Eintraege, die live auf der
-# offiziellen Hersteller-Spezifikationsseite bestaetigt wurden (kein
-# Google-Snippet, kein Haendler-Kopie, keine falsche Ausstattungsvariante).
-# Bei der Recherche (20.09.2026) hatten die meisten Marken KEINE
-# groessenaufgeschluesselte Gewichtstabelle, sondern nur einen einzelnen
-# Wert fuer eine nicht naeher spezifizierte Standardgroesse - deshalb ist
-# frame_size hier oft null. Mehrere Modelle (Simplon Rapcon Pmax SX, Trek
-# Fuel EXe, Haibike Lyke CF, Bulls Sonic EVO AM SX-i, Specialized Turbo
-# Levo SL, Santa Cruz Heckler SL, Mondraker Neat, Scott Lumen eRIDE, Orbea
-# Rise, sowie Cube AMS Hybrid ONE44 in der exakt getrackten Race-Variante)
-# hatten KEINEN belastbaren Wert und fehlen hier bewusst, statt einen
-# unsicheren Wert einzutragen.
+# Referenzgewichte je Modell - kein Rateergebnis, sondern recherchierte
+# Werte (Hersteller-Spezifikationsseiten und/oder Testredaktionen). main.py
+# nutzt den Mittelwert aus weight_min_kg/weight_max_kg als weight_est_kg,
+# wenn ein einzelnes Angebot selbst kein Gewicht nennt (weight_kg bleibt
+# dann trotzdem null - die beiden Felder werden nie vermischt, siehe
+# sources/base.py). Die Spanne selbst kommt in keinem Angebot an, nur der
+# Mittelwert - wer die volle Spanne sehen will, findet sie hier.
 #
-# Wird in main.py als weight_est_kg genutzt, wenn ein einzelnes Angebot
-# selbst kein Gewicht nennt (weight_kg bleibt dann trotzdem null - die
-# beiden Felder werden nie vermischt, siehe sources/base.py).
+# Stand 21.09.2026, zwei Recherchedurchgaenge:
+# 1) 20.09.2026: nur offizielle Herstellerseiten, strikt (5 Modelle
+#    bestaetigt, siehe Git-Historie dieser Datei).
+# 2) 21.09.2026: vom Nutzer nachgereichte, deutlich vollstaendigere
+#    Tabelle (Hersteller + Testredaktionen + Foren), 15 von 16 Modellen
+#    abgedeckt - ersetzt Durchgang 1 komplett, da groesseres/genaueres
+#    Bild (Spannen statt Einzelwert, mehrere Ausstattungsvarianten).
 #
-# frame_size: null = gilt pauschal fuers ganze Modell (keine
-#   groessenspezifische Herstellerangabe verfuegbar). Ein gesetzter Wert
-#   (z.B. "L") wird nur auf Angebote mit exakt dieser frame_size angewendet.
+# Bekannter Widerspruch: KTM Macina Scarp SX hatte Durchgang 1 auf
+# ktm-bikes.at ein einzelnes bestaetigtes Gewicht von 19.1kg (Gr. L)
+# gefunden - Durchgang 2 nennt fuer dieselbe Groesse 16.5-18.1kg (variiert
+# nach Motor-/Ausstattungsvariante Exonic/Master). Durchgang 2 uebernommen
+# (differenzierter, mehrere Ausstattungen beruecksichtigt), der alte Wert
+# bleibt hier nur als Kommentar dokumentiert statt stillschweigend zu
+# verschwinden.
+#
+# Simplon Rapcon Pmax SX fehlt weiterhin bewusst: laut beiden
+# Rechercheversuchen gibt es bei Simplon fuer den Rapcon keine "SX"-
+# Motorvariante (nur TQ HPR50, Bosch CX(-Race), Pinion MGU E1.12) - die
+# exakt getrackte Modellbezeichnung liess sich nicht verifizieren, daher
+# kein Wert statt einer Vermutung.
+#
+# frame_size: null = Spanne gilt pauschal fuers ganze Modell (Ursache der
+#   Varianz ist meist Ausstattung/Akkugroesse, nicht Rahmengroesse). Ein
+#   gesetzter Wert (z.B. "L") wird nur auf Angebote mit exakt dieser
+#   frame_size angewendet.
 
 models:
-  - model_id: ktm-macina-scarp-sx
-    weight_kg: 19.1
-    frame_size: L
-    note: "48cm laut Hersteller entspricht Groesse L"
-    source: "ktm-bikes.at, offizielle Spezifikationsseite, geprueft 20.09.2026"
-
-  - model_id: rotwild-rx275
-    weight_kg: 15.9
-    frame_size: L
-    note: "Pro-Ausstattung; Hersteller nennt zusaetzlich Einzelkomponenten (Rahmen 1893g, Akku 1400g, Motor TQ HPR50 1850g)"
-    source: "rotwild.com/en/r.x275-pro/20461, geprueft 20.09.2026"
-
   - model_id: canyon-neuron-onfly-cf
-    weight_kg: 20.1
+    weight_min_kg: 19.7
+    weight_max_kg: 20.4
     frame_size: null
-    note: "CF 8, Herstellerangabe ohne Groessenaufschluesselung"
-    source: "canyon.com, offizielle Spezifikationsseite, geprueft 20.09.2026"
+    note: "Je nach Ausstattung CF7-CF9, Groesse M"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+
+  - model_id: cube-ams-hybrid-one44-c68x-race
+    weight_min_kg: 16.2
+    weight_max_kg: 16.8
+    frame_size: null
+    note: "Wert fuer die SLT-Ausstattung (leichteste Variante der AMS Hybrid ONE44-Reihe) - die exakt getrackte Race-Ausstattung selbst war nicht separat auffindbar, SLT liegt aber deutlich naeher an unserem Modell als der zuvor gefundene falsche Wert fuer eine andere Baureihe"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+
+  - model_id: ktm-macina-scarp-sx
+    weight_min_kg: 16.5
+    weight_max_kg: 18.1
+    frame_size: L
+    note: "Exonic (16.5-16.9) bis Master (18.1), Groesse L. Widerspricht dem frueher gefundenen Einzelwert 19.1kg von ktm-bikes.at - siehe Dateikopf"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+
+  - model_id: bulls-sonic-evo-am-sx
+    weight_min_kg: 18.0
+    weight_max_kg: 18.6
+    frame_size: null
+    note: "Herstellerangabe 18.0kg (Gr. M), Testredaktion 18.4-18.6kg (Gr. L)"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+
+  - model_id: flyer-uproc-slx
+    weight_min_kg: 17.8
+    weight_max_kg: 18.2
+    frame_size: null
+    note: "Herstellerangabe ~18.0kg, Carbon, Bosch SX (nur ein grober Wert ohne Spanne recherchiert, hier symmetrisch um 18.0 gefasst)"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+
+  - model_id: trek-fuel-exe
+    weight_min_kg: 18.4
+    weight_max_kg: 20.5
+    frame_size: null
+    note: "Carbon-Topmodelle 18.4-18.8, Alu-Modelle 19-20.5"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+
+  - model_id: specialized-turbo-levo-sl
+    weight_min_kg: 16.9
+    weight_max_kg: 17.7
+    frame_size: null
+    note: "S-Works/Comp Carbon"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
 
   - model_id: canyon-spectral-onfly-cf
-    weight_kg: 18.9
+    weight_min_kg: 18.1
+    weight_max_kg: 19.4
     frame_size: null
-    note: "CF 8, Herstellerangabe ohne Groessenaufschluesselung"
-    source: "canyon.com, offizielle Spezifikationsseite, geprueft 20.09.2026"
+    note: "CF LTD (18.1) bis CF9 (19.4), Groesse M/L"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
 
   - model_id: focus-jam2-sl
-    weight_kg: 20.2
+    weight_min_kg: 17.9
+    weight_max_kg: 20.3
     frame_size: null
-    note: "430Wh-Akku-Variante, Herstellerangabe ohne Groessenaufschluesselung"
-    source: "focus-bikes.com, offizielle Spezifikationsseite, geprueft 20.09.2026"
+    note: "9.9-Topmodell (17.9) bis 8.7-Alu (20.3)"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+
+  - model_id: santa-cruz-heckler-sl
+    weight_min_kg: 19.0
+    weight_max_kg: 19.3
+    frame_size: null
+    note: "Herstellerangabe ~19.0, Testredaktion (XX AXS, Gr. L) 19.3"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+
+  - model_id: haibike-lyke-cf
+    weight_min_kg: 18.6
+    weight_max_kg: 19.2
+    frame_size: null
+    note: "CF10 (18.6) bis CF11 (19.2), Groesse L"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+
+  - model_id: mondraker-neat
+    weight_min_kg: 17.8
+    weight_max_kg: 18.9
+    frame_size: null
+    note: "RR SL (17.8-18.3) bis Neat R (18.9)"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+
+  - model_id: scott-lumen-eride
+    weight_min_kg: 15.5
+    weight_max_kg: 18.8
+    frame_size: null
+    note: "Herstellerangabe kleinste, optimierte Groesse (15.5) bis realistisches Testgewicht (18.8) - sehr breite Spanne, mit Vorsicht zu genau nehmen"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+
+  - model_id: orbea-rise
+    weight_min_kg: 16.2
+    weight_max_kg: 20.3
+    frame_size: null
+    note: "Stark akkuabhaengig: M-LTD/630Wh (16.2-16.5) bis M20/420Wh (20.3) - sehr breite Spanne, mit Vorsicht zu genau nehmen"
+    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+
+  - model_id: rotwild-rx275
+    weight_min_kg: 15.9
+    weight_max_kg: 15.9
+    frame_size: L
+    note: "Pro-Ausstattung; Hersteller nennt zusaetzlich Einzelkomponenten (Rahmen 1893g, Akku 1400g, Motor TQ HPR50 1850g). Nicht Teil der Nutzer-Nachrecherche, unveraendert aus Durchgang 1 uebernommen"
+    source: "rotwild.com/en/r.x275-pro/20461, geprueft 20.09.2026"

@@ -73,8 +73,8 @@ def modelle_laden() -> list[dict]:
 
 
 def gewichtsreferenz_laden() -> dict[str, dict]:
-    """model_id -> {weight_kg, frame_size} - siehe config/weight_reference.yaml
-    fuer die Herkunft und warum hier nur eine Handvoll Modelle drinstehen."""
+    """model_id -> {weight_min_kg, weight_max_kg, frame_size} - siehe
+    config/weight_reference.yaml fuer Herkunft und Abdeckung."""
     if not WEIGHT_REFERENCE_PATH.exists():
         return {}
     with open(WEIGHT_REFERENCE_PATH, encoding="utf-8") as f:
@@ -84,13 +84,16 @@ def gewichtsreferenz_laden() -> dict[str, dict]:
 
 def gewicht_schaetzen(treffer: list[Listing], modell_id: str, referenz: dict[str, dict]) -> None:
     """Setzt weight_est_kg auf Angeboten ohne eigene weight_kg-Angabe, wenn
-    fuer dieses Modell ein bestaetigter Referenzwert existiert. Aendert
+    fuer dieses Modell ein recherchierter Referenzwert existiert - als
+    Mittelwert aus weight_min_kg/weight_max_kg (die volle Spanne steht nur
+    in config/weight_reference.yaml, siehe dortiger Kommentar). Aendert
     weight_kg nie - echte Verkaeufer-Angabe und Herstellerschaetzung bleiben
     strikt getrennt."""
     eintrag = referenz.get(modell_id)
     if not eintrag:
         return
 
+    mittelwert = (eintrag["weight_min_kg"] + eintrag["weight_max_kg"]) / 2
     referenz_groesse = eintrag.get("frame_size")
     for t in treffer:
         if t.weight_kg is not None:
@@ -98,7 +101,7 @@ def gewicht_schaetzen(treffer: list[Listing], modell_id: str, referenz: dict[str
         if referenz_groesse is not None:
             if not t.frame_size or t.frame_size.upper() != str(referenz_groesse).upper():
                 continue
-        t.weight_est_kg = eintrag["weight_kg"]
+        t.weight_est_kg = round(mittelwert, 1)
 
 
 def modell_finden(modelle: list[dict], modell_id: str) -> dict:
