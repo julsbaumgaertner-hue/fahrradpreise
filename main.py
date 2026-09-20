@@ -121,10 +121,27 @@ def quellen_abfragen(modell: dict) -> list[Listing]:
                 match_boost=modell["match_boost"],
                 min_score=modell["min_score"],
             )
-            vor_rahmenfilter = len(treffer)
+            vor_filter = len(treffer)
             treffer = [t for t in treffer if not ist_rahmen_only(t.title)]
-            rahmen_only = vor_rahmenfilter - len(treffer)
-            hinweis = f" ({rahmen_only} Rahmen-only rausgefiltert)" if rahmen_only else ""
+            rahmen_only = vor_filter - len(treffer)
+
+            min_preis = modell.get("min_price_eur")
+            if min_preis is not None:
+                vor_preisfilter = len(treffer)
+                treffer = [
+                    t for t in treffer
+                    if t.price_eur is None or t.price_eur >= min_preis
+                ]
+                zu_guenstig = vor_preisfilter - len(treffer)
+            else:
+                zu_guenstig = 0
+
+            hinweise = []
+            if rahmen_only:
+                hinweise.append(f"{rahmen_only} Rahmen-only")
+            if zu_guenstig:
+                hinweise.append(f"{zu_guenstig} unter {min_preis:.0f}€")
+            hinweis = f" ({', '.join(hinweise)} rausgefiltert)" if hinweise else ""
             console.print(f"   {len(treffer)} passende Treffer bei {source.name}{hinweis}")
             alle_treffer.extend(treffer)
         except ScraperBlocked as e:

@@ -14,6 +14,14 @@
 #   (SLX/TM/Pro/C:62 statt C:68X) sollen nicht ausgeschlossen, nur niedriger
 #   einsortiert werden.
 # min_score: Schwelle, ab der ein Fund in der Ausgabe auftaucht (0-100).
+# min_price_eur: harte Preisuntergrenze - Angebote darunter werden verworfen,
+#   OHNE Preisangabe aber behalten (fehlender Preis ist kein Signal fuer
+#   Zubehoer). Grund: bei diesen hochpreisigen E-MTBs (Neupreis 3000-8000 Euro)
+#   sind Angebote deutlich darunter in der Praxis fast immer Einzelteile
+#   (Vorbau, Lackstift, Adapterplatte, ...) oder Verleih-/Testangebote statt
+#   echter Komplettrad-Verkaeufe - am 20.09.2026 live gegen alle 933 damaligen
+#   Treffer geprueft, 1000 Euro hat sauber getrennt. Pro Modell einstellbar,
+#   falls ein kuenftiges (guenstigeres) Modell eine andere Grenze braucht.
 
 models:
   - id: cube-ams-hybrid-one44-c68x-race
@@ -35,6 +43,7 @@ models:
       - "400x"
       - "440x"
     min_score: 55
+    min_price_eur: 1000
 
   # Ab hier: vergleichbare Light-E-MTBs (Bosch SX/TQ HPR50/Fazua Ride 60 o.ae.,
   # ~18-20kg statt Full-Power-Fully mit 23-26kg) zum Cube AMS Hybrid ONE44 oben,
@@ -59,6 +68,7 @@ models:
       - cf
       - carbon
     min_score: 55
+    min_price_eur: 1000
 
   - id: ktm-macina-scarp-sx
     display_name: "KTM Macina Scarp SX"
@@ -74,6 +84,7 @@ models:
       - sx
       - prowler
     min_score: 55
+    min_price_eur: 1000
 
   - id: bulls-sonic-evo-am-sx
     display_name: "Bulls Sonic EVO AM SX-i"
@@ -90,6 +101,7 @@ models:
       - "sx-i"
       - sxi
     min_score: 55
+    min_price_eur: 1000
 
   - id: flyer-uproc-slx
     display_name: "Flyer Uproc SL:X"
@@ -103,6 +115,7 @@ models:
       - slx
     match_boost: []
     min_score: 50
+    min_price_eur: 1000
 
   - id: simplon-rapcon-pmax-sx
     display_name: "Simplon Rapcon Pmax SX"
@@ -117,6 +130,7 @@ models:
       - pmax
       - sx
     min_score: 55
+    min_price_eur: 1000
 
   - id: trek-fuel-exe
     display_name: "Trek Fuel EXe"
@@ -129,6 +143,7 @@ models:
       - exe
     match_boost: []
     min_score: 50
+    min_price_eur: 1000
 
   - id: specialized-turbo-levo-sl
     display_name: "Specialized Turbo Levo SL"
@@ -143,6 +158,7 @@ models:
       - turbo
       - carbon
     min_score: 55
+    min_price_eur: 1000
 
   - id: canyon-spectral-onfly-cf
     display_name: "Canyon Spectral:ONfly CF"
@@ -158,6 +174,7 @@ models:
       - cf
       - carbon
     min_score: 55
+    min_price_eur: 1000
 
   - id: focus-jam2-sl
     display_name: "Focus JAM² SL"
@@ -172,6 +189,7 @@ models:
     match_boost:
       - "jam2"
     min_score: 55
+    min_price_eur: 1000
 
   - id: santa-cruz-heckler-sl
     display_name: "Santa Cruz Heckler SL"
@@ -186,6 +204,7 @@ models:
       - carbon
       - cc
     min_score: 55
+    min_price_eur: 1000
 
   - id: haibike-lyke-cf
     display_name: "Haibike Lyke CF"
@@ -199,6 +218,7 @@ models:
       - cf
       - carbon
     min_score: 55
+    min_price_eur: 1000
 
   - id: mondraker-neat
     display_name: "Mondraker Neat"
@@ -209,6 +229,7 @@ models:
       - neat
     match_boost: []
     min_score: 50
+    min_price_eur: 1000
 
   - id: scott-lumen-eride
     display_name: "Scott Lumen eRIDE"
@@ -221,6 +242,7 @@ models:
     match_boost:
       - eride
     min_score: 55
+    min_price_eur: 1000
 
   - id: orbea-rise
     display_name: "Orbea Rise"
@@ -235,6 +257,7 @@ models:
       - sl
       - gen3
     min_score: 55
+    min_price_eur: 1000
 
   - id: rotwild-rx275
     display_name: "Rotwild R.X275"
@@ -247,3 +270,4 @@ models:
       - x275
     match_boost: []
     min_score: 50
+    min_price_eur: 1000
