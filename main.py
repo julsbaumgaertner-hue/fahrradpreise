@@ -29,6 +29,7 @@ from rich.table import Table
 
 from sources.base import Listing, ScraperBlocked
 from sources.kleinanzeigen import KleinanzeigenSource
+from sources.bikemarkt import BikemarktSource
 
 REPO = Path(__file__).parent
 CONFIG_PATH = REPO / "config" / "models.yaml"
@@ -38,6 +39,7 @@ RESULTS_DIR = REPO / "results"
 # der Reihe nach auf und faengt Fehler einzeln ab.
 SOURCES = [
     KleinanzeigenSource(),
+    BikemarktSource(),
 ]
 
 console = Console()

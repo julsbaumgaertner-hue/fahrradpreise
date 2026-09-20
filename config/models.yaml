@@ -22,6 +22,7 @@ models:
       - "Cube AMS Hybrid ONE44"
       - "Cube AMS Hybrid ONE44 C68X"
       - "Cube AMS Hybrid ONE44 Race"
+      - "Cube AMS Hybrid"
     match_required:
       - cube
       - ams
