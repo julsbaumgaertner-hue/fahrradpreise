@@ -6,27 +6,49 @@
 # sources/base.py). Die Spanne selbst kommt in keinem Angebot an, nur der
 # Mittelwert - wer die volle Spanne sehen will, findet sie hier.
 #
-# Stand 21.09.2026, zwei Recherchedurchgaenge:
+# Stand 21.09.2026, drei Recherchedurchgaenge:
 # 1) 20.09.2026: nur offizielle Herstellerseiten, strikt (5 Modelle
 #    bestaetigt, siehe Git-Historie dieser Datei).
-# 2) 21.09.2026: vom Nutzer nachgereichte, deutlich vollstaendigere
-#    Tabelle (Hersteller + Testredaktionen + Foren), 15 von 16 Modellen
-#    abgedeckt - ersetzt Durchgang 1 komplett, da groesseres/genaueres
-#    Bild (Spannen statt Einzelwert, mehrere Ausstattungsvarianten).
+# 2) 21.09.2026 vormittags: vom Nutzer nachgereichte, deutlich
+#    vollstaendigere Tabelle (Hersteller + Testredaktionen + Foren),
+#    15 von 16 Modellen abgedeckt.
+# 3) 21.09.2026 nachmittags: Praezisions-Nachrecherche, nachdem der
+#    Nutzer zwei konkrete Fehler aus Durchgang 2 gemeldet hatte (Cube und
+#    vermeintlich Bulls) und weitere Fehler vermutete - alle 16 Modelle
+#    nochmal einzeln mit Kreuzpruefung (Hersteller + unabhaengige
+#    Testquelle) durchgesehen. Korrigierte Werte aus Durchgang 3
+#    uebernommen, unveraenderte Werte blieben aus Durchgang 2 stehen.
 #
-# Bekannter Widerspruch: KTM Macina Scarp SX hatte Durchgang 1 auf
-# ktm-bikes.at ein einzelnes bestaetigtes Gewicht von 19.1kg (Gr. L)
-# gefunden - Durchgang 2 nennt fuer dieselbe Groesse 16.5-18.1kg (variiert
-# nach Motor-/Ausstattungsvariante Exonic/Master). Durchgang 2 uebernommen
-# (differenzierter, mehrere Ausstattungen beruecksichtigt), der alte Wert
-# bleibt hier nur als Kommentar dokumentiert statt stillschweigend zu
-# verschwinden.
+# Aufgeloester Fehler: Cube AMS Hybrid ONE44 C:68X Race hatte Durchgang 2
+# faelschlich den Wert der SLT-Ausstattung eingetragen (16.2-16.8kg).
+# Durchgang 3 hat fuer die exakt getrackte Race-Variante 18.8kg auf zwei
+# unabhaengigen Quellen bestaetigt (cube.eu + emtb-test.com), deckt sich
+# mit der eigenen Nutzer-Angabe (~18.7kg, besitzt das Rad).
 #
-# Simplon Rapcon Pmax SX fehlt weiterhin bewusst: laut beiden
-# Rechercheversuchen gibt es bei Simplon fuer den Rapcon keine "SX"-
-# Motorvariante (nur TQ HPR50, Bosch CX(-Race), Pinion MGU E1.12) - die
-# exakt getrackte Modellbezeichnung liess sich nicht verifizieren, daher
-# kein Wert statt einer Vermutung.
+# Aufgeloestes Missverstaendnis: der Nutzer hatte fuer Bulls Sonic EVO AM
+# SX-i 24.5-26kg aus einem anderen Chat gemeldet - Durchgang 3 hat
+# geklaert, dass dieser Wert zum GLEICHNAMIGEN Modell OHNE "SX" gehoert
+# (Bosch CX Gen4, Vollausstattung, andere Gewichtsklasse). Fuer die exakt
+# getrackte SX-i-Variante bestaetigen bulls.de UND bosch-ebike.com
+# unabhaengig 18.0kg - der bisherige Wert war korrekt und blieb
+# unveraendert.
+#
+# Bekannter, nicht aufgeloester Widerspruch: KTM Macina Scarp SX hatte
+# Durchgang 1 auf ktm-bikes.at einen Einzelwert von 19.1kg (Gr. L)
+# gefunden - Durchgang 2 nennt fuer dieselbe Groesse 16.5-18.1kg (je nach
+# Motor-/Ausstattungsvariante Exonic/Master), Durchgang 3 hat diesen Wert
+# erneut bestaetigt (mehrfach belegt). Der aktuelle Wert (16.5-18.1kg)
+# gilt daher als verlaesslicher, der alte 19.1kg-Wert bleibt nur als
+# Kommentar dokumentiert statt stillschweigend zu verschwinden.
+#
+# Simplon Rapcon Pmax SX fehlt weiterhin bewusst: nach DREI
+# Rechercheversuchen (inkl. Durchgang 3, der gezielt nach
+# umgangssprachlichen/abweichenden Bezeichnungen gesucht hat) gibt es bei
+# Simplon fuer den Rapcon keine "SX"-Motorvariante (nur TQ HPR50, Bosch
+# CX(-Race) mit 19.8-21.3kg, Pinion MGU E1.12) - die exakt getrackte
+# Modellbezeichnung laesst sich nicht verifizieren. Vermutlich eine
+# Verwechslung mit einem anderen Modell - beim Nutzer nachfragen, statt
+# weiter zu raten.
 #
 # frame_size: null = Spanne gilt pauschal fuers ganze Modell (Ursache der
 #   Varianz ist meist Ausstattung/Akkugroesse, nicht Rahmengroesse). Ein
@@ -42,11 +64,11 @@ models:
     source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
 
   - model_id: cube-ams-hybrid-one44-c68x-race
-    weight_min_kg: 16.2
-    weight_max_kg: 16.8
+    weight_min_kg: 18.2
+    weight_max_kg: 19.4
     frame_size: null
-    note: "Wert fuer die SLT-Ausstattung (leichteste Variante der AMS Hybrid ONE44-Reihe) - die exakt getrackte Race-Ausstattung selbst war nicht separat auffindbar, SLT liegt aber deutlich naeher an unserem Modell als der zuvor gefundene falsche Wert fuer eine andere Baureihe"
-    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+    note: "18.8kg fuer die exakt getrackte Race-Ausstattung auf zwei unabhaengigen Quellen bestaetigt (cube.eu + emtb-test.com), deckt sich mit Nutzer-Eigenangabe (~18.7kg). Kleine Sicherheitsspanne um den bestaetigten Einzelwert, da keine Groessenaufschluesselung verfuegbar"
+    source: "Praezisions-Nachrecherche (Hersteller + Testredaktion), 21.09.2026"
 
   - model_id: ktm-macina-scarp-sx
     weight_min_kg: 16.5
@@ -59,8 +81,8 @@ models:
     weight_min_kg: 18.0
     weight_max_kg: 18.6
     frame_size: null
-    note: "Herstellerangabe 18.0kg (Gr. M), Testredaktion 18.4-18.6kg (Gr. L)"
-    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+    note: "Herstellerangabe 18.0kg (Gr. M, Bosch Performance Line SX), Testredaktion 18.4-18.6kg (Gr. L). Bestaetigt korrekt in Durchgang 3 - ACHTUNG Verwechslungsgefahr: 'Bulls Sonic EVO AM' OHNE 'SX' ist ein anderes, deutlich schwereres Modell (Bosch CX Gen4, ~24.5-26kg)"
+    source: "bulls.de + bosch-ebike.com, geprueft 21.09.2026"
 
   - model_id: flyer-uproc-slx
     weight_min_kg: 17.8
@@ -78,38 +100,38 @@ models:
 
   - model_id: specialized-turbo-levo-sl
     weight_min_kg: 16.9
-    weight_max_kg: 17.7
+    weight_max_kg: 19.4
     frame_size: null
-    note: "S-Works/Comp Carbon"
-    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+    note: "S-Works Carbon (16.9-17.7) bis Comp (19.4, offizielle Specialized-FAQ, Gr. L) - Comp-Ausstattung ist spuerbar schwerer, in Durchgang 2 nicht erfasst"
+    source: "Praezisions-Nachrecherche (Hersteller), 21.09.2026"
 
   - model_id: canyon-spectral-onfly-cf
     weight_min_kg: 18.1
-    weight_max_kg: 19.4
+    weight_max_kg: 18.6
     frame_size: null
-    note: "CF LTD (18.1) bis CF9 (19.4), Groesse M/L"
-    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+    note: "CF LTD (18.1) bis CF8 (18.6), Groesse M/L - obere Grenze in Durchgang 3 nach unten korrigiert (19.4 war nicht belegt)"
+    source: "Praezisions-Nachrecherche (Hersteller), 21.09.2026"
 
   - model_id: focus-jam2-sl
     weight_min_kg: 17.9
-    weight_max_kg: 20.3
+    weight_max_kg: 19.7
     frame_size: null
-    note: "9.9-Topmodell (17.9) bis 8.7-Alu (20.3)"
-    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+    note: "9.9-Topmodell (17.9) bis 8.7-Alu (19.7) - obere Grenze in Durchgang 3 nach unten korrigiert (20.3 war nicht belegt)"
+    source: "Praezisions-Nachrecherche (Hersteller), 21.09.2026"
 
   - model_id: santa-cruz-heckler-sl
-    weight_min_kg: 19.0
-    weight_max_kg: 19.3
+    weight_min_kg: 18.5
+    weight_max_kg: 19.5
     frame_size: null
-    note: "Herstellerangabe ~19.0, Testredaktion (XX AXS, Gr. L) 19.3"
-    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+    note: "Herstellerangabe ~19.0, Testredaktion (XX AXS, Gr. L) 19.3 - Spanne in Durchgang 3 leicht geweitet nach weiteren Ausstattungsvarianten"
+    source: "Praezisions-Nachrecherche (Hersteller + Testredaktion), 21.09.2026"
 
   - model_id: haibike-lyke-cf
     weight_min_kg: 18.6
-    weight_max_kg: 19.2
+    weight_max_kg: 19.8
     frame_size: null
-    note: "CF10 (18.6) bis CF11 (19.2), Groesse L"
-    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+    note: "CF10-Basismodell ist schwerer als urspruenglich erfasst - Spanne in Durchgang 3 nach oben korrigiert (vorher bis 19.2)"
+    source: "Praezisions-Nachrecherche (Hersteller), 21.09.2026"
 
   - model_id: mondraker-neat
     weight_min_kg: 17.8
@@ -120,10 +142,10 @@ models:
 
   - model_id: scott-lumen-eride
     weight_min_kg: 15.5
-    weight_max_kg: 18.8
+    weight_max_kg: 16.3
     frame_size: null
-    note: "Herstellerangabe kleinste, optimierte Groesse (15.5) bis realistisches Testgewicht (18.8) - sehr breite Spanne, mit Vorsicht zu genau nehmen"
-    source: "Nutzer-Recherche (Hersteller + Testredaktionen), 21.09.2026"
+    note: "Obere Grenze (18.8) in Durchgang 3 deutlich nach unten korrigiert - durch keine Quelle gestuetzt, offizielle scott-sports.com-Werte liegen durchgehend bei 15.5-16.3kg"
+    source: "Praezisions-Nachrecherche (Hersteller), 21.09.2026"
 
   - model_id: orbea-rise
     weight_min_kg: 16.2
