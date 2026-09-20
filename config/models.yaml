@@ -1,0 +1,36 @@
+# Ziel-Modelle fuer den Preis-Scanner. Neue Modelle hier einfach ergaenzen -
+# main.py nimmt die Modell-id als CLI-Parameter, nichts ist hart verdrahtet.
+#
+# search_terms: werden woertlich als Suchanfrage an die einzelnen Quellen
+#   geschickt (mehrere Varianten, da der Modellname lang ist und selten exakt
+#   so geschrieben wird).
+# match_required: Tokens, die (fuzzy) alle im Fundtitel vorkommen muessen -
+#   das ist die Kernidentitaet des Modells. "hybrid" ist hier bewusst mit
+#   drin: Cube nutzt "ONE44" sowohl fuer das normale (Muskelkraft-)Fully als
+#   auch fuer das E-Bike "AMS Hybrid ONE44" - ohne "hybrid" als Pflicht wuerde
+#   das falsche, nicht-elektrische Modell durchrutschen.
+# match_boost: Tokens, die den Score erhoehen, aber NICHT hart filtern - z.B.
+#   die Akkuzahl (400X/440X/...) wechselt pro Modelljahr, andere Trims
+#   (SLX/TM/Pro/C:62 statt C:68X) sollen nicht ausgeschlossen, nur niedriger
+#   einsortiert werden.
+# min_score: Schwelle, ab der ein Fund in der Ausgabe auftaucht (0-100).
+
+models:
+  - id: cube-ams-hybrid-one44-c68x-race
+    display_name: "Cube AMS Hybrid ONE44 C:68X Race"
+    search_terms:
+      - "Cube AMS Hybrid ONE44"
+      - "Cube AMS Hybrid ONE44 C68X"
+      - "Cube AMS Hybrid ONE44 Race"
+    match_required:
+      - cube
+      - ams
+      - hybrid
+      - one44
+    match_boost:
+      - "68x"
+      - c68x
+      - race
+      - "400x"
+      - "440x"
+    min_score: 55
