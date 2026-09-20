@@ -160,3 +160,10 @@ models:
     frame_size: L
     note: "Pro-Ausstattung; Hersteller nennt zusaetzlich Einzelkomponenten (Rahmen 1893g, Akku 1400g, Motor TQ HPR50 1850g). Nicht Teil der Nutzer-Nachrecherche, unveraendert aus Durchgang 1 uebernommen"
     source: "rotwild.com/en/r.x275-pro/20461, geprueft 20.09.2026"
+
+  - model_id: cube-stereo-hybrid-one44-hpc-slx-800
+    weight_min_kg: 24.3
+    weight_max_kg: 24.3
+    frame_size: null
+    note: "Full-Power-Modell (Bosch Performance Line CX 85Nm, 800Wh), nicht Teil der Light-E-MTB-Vergleichsgruppe - deutlich schwerer als das andere getrackte Cube-Modell (AMS Hybrid ONE44, Bosch SX). Einzelwert ohne Groessenaufschluesselung, auf zwei unabhaengigen Haendlerseiten identisch bestaetigt"
+    source: "lucky-bike.de + Websuche-Aggregation, geprueft 21.09.2026"
