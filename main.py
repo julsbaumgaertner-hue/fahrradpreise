@@ -32,6 +32,7 @@ from sources.kleinanzeigen import KleinanzeigenSource
 from sources.bikemarkt import BikemarktSource
 from sources.buycycle import BuycycleSource
 from sources.upway import UpwaySource
+from sources.jobrad import JobradSource
 
 REPO = Path(__file__).parent
 CONFIG_PATH = REPO / "config" / "models.yaml"
@@ -44,6 +45,7 @@ SOURCES = [
     BikemarktSource(),
     BuycycleSource(),
     UpwaySource(),
+    JobradSource(),
 ]
 
 console = Console()
