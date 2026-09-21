@@ -161,6 +161,13 @@ models:
     note: "Pro-Ausstattung; Hersteller nennt zusaetzlich Einzelkomponenten (Rahmen 1893g, Akku 1400g, Motor TQ HPR50 1850g). Nicht Teil der Nutzer-Nachrecherche, unveraendert aus Durchgang 1 uebernommen"
     source: "rotwild.com/en/r.x275-pro/20461, geprueft 20.09.2026"
 
+  - model_id: simplon-rapcon-pmax-tq
+    weight_min_kg: 17.6
+    weight_max_kg: 19.4
+    frame_size: null
+    note: "Herstellerangabe (Basis) 17.6kg, unabhaengiger Testredaktions-Wert (Groesse XL, echte Waage) 19.4kg. Modell am 21.09.2026 umbenannt von 'SX' auf 'TQ' - Simplon bietet den Rapcon Pmax nie mit SX-Motor an, siehe Kommentar in models.yaml"
+    source: "emtb-news.de (Herstellerangabe) + enduro-mtb.com (Redaktionstest, Gr. XL, echte Waage), geprueft 21.09.2026"
+
   - model_id: cube-stereo-hybrid-one44-hpc-slx-800
     weight_min_kg: 24.3
     weight_max_kg: 24.3

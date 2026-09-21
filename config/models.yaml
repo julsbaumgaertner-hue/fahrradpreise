@@ -80,11 +80,23 @@ models:
       - ktm
       - macina
       - scarp
+      - sx
     match_boost:
       - sx
       - prowler
     min_score: 55
     min_price_eur: 1000
+    # "sx" steht bewusst in BEIDEN Listen: required fuer die Bulls-Luecke
+    # (siehe unten), zusaetzlich boost, weil BASE_SCORE (50) allein unter
+    # min_score (55) liegt - ohne den Boost-Punkt haette der erste Fix-
+    # Versuch alle echten Treffer rausgefiltert (score 50 statt 60), live
+    # beim Nachscan als 0-Treffer-Regression aufgefallen und sofort korrigiert.
+    # "sx" praeventiv von match_boost auf match_required gezogen (21.09.2026,
+    # im Zuge der Bulls-Korrektur) - dieselbe Luecke wie bei Bulls, hier aber
+    # noch keine tatsaechliche Verunreinigung gefunden: Titel-Audit zeigt
+    # 0 von 23 Treffern ohne "SX" im Titel, aktueller Datenstand war schon
+    # sauber. Absicherung fuer kuenftige Scans, falls KTM auch eine Nicht-SX-
+    # Scarp-Variante staerker bewirbt.
 
   - id: bulls-sonic-evo-am-sx
     display_name: "Bulls Sonic EVO AM SX-i"
@@ -128,18 +140,31 @@ models:
     min_score: 50
     min_price_eur: 1000
 
-  - id: simplon-rapcon-pmax-sx
-    display_name: "Simplon Rapcon Pmax SX"
+  # War bis 21.09.2026 "simplon-rapcon-pmax-sx" mit "pmax"+"sx" nur als
+  # match_boost (nicht required) - dadurch landete der GESAMTE Rapcon-Pmax-
+  # Katalog unter diesem Modell, quer durch alle drei echten Motorvarianten
+  # (TQ HPR50 ~17.6-19.4kg, Bosch CX ~19.8-21.3kg, Pinion E1.12 vermutlich
+  # noch schwerer) - Titel-Audit vom 21.09.2026 zeigte 0 von 70 Treffern mit
+  # "SX" im Titel. Bereits in Durchgang 3 der Gewichtsrecherche festgestellt:
+  # Simplon bietet den Rapcon Pmax GAR NICHT mit SX-Motor an, das war von
+  # Anfang an ein Missverstaendnis der Modellbezeichnung. Umbenannt und auf
+  # die tatsaechlich leichte TQ-Variante eingeschraenkt (passt als einzige
+  # zur ~18-20kg-Vergleichsgruppe) - "tq" jetzt Pflicht-Token, trennt sauber
+  # von "cx"/"pinion"-Titeln (keine dieser Woerter faellt unter "tq").
+  - id: simplon-rapcon-pmax-tq
+    display_name: "Simplon Rapcon Pmax TQ"
     search_terms:
+      - "Simplon Rapcon Pmax TQ"
+      - "Simplon Rapcon TQ"
       - "Simplon Rapcon Pmax"
-      - "Simplon Rapcon Pmax SX"
-      - "Simplon Rapcon"
     match_required:
       - simplon
       - rapcon
+      - tq
     match_boost:
       - pmax
-      - sx
+      - hpr50
+      - hpr60
     min_score: 55
     min_price_eur: 1000
 
@@ -168,8 +193,19 @@ models:
     match_boost:
       - turbo
       - carbon
+    match_exclude:
+      - kenevo
     min_score: 55
     min_price_eur: 1000
+    # match_exclude auf "kenevo" ergaenzt (21.09.2026): fuzz.partial_ratio(
+    # "levo", "kenevo") = 75 - GENAU auf der match_required-Schwelle, dadurch
+    # sind 7 von 45 Treffern tatsaechlich das eigenstaendige Modell
+    # "Specialized Turbo Kenevo SL" (anderes Enduro-Light-E-MTB, nicht Levo
+    # SL) gewesen. Gewichtsmaessig zufaellig kein Sicherheitsrisiko (Kenevo
+    # SL laut Herstellerangaben + Redaktionstests ebenfalls ~18.4-19.5kg),
+    # aber trotzdem ein falsch zugeordnetes Modell - per Nutzeranforderung
+    # ("absolut sauber arbeiten") korrigiert statt als False-Positive-Zufall
+    # stehen gelassen.
 
   - id: canyon-spectral-onfly-cf
     display_name: "Canyon Spectral:ONfly CF"

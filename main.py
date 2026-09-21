@@ -27,7 +27,7 @@ import yaml
 from rich.console import Console
 from rich.table import Table
 
-from matcher import ist_rahmen_only
+from matcher import hat_ausschlusstoken, ist_rahmen_only
 from sources.base import Listing, ScraperBlocked
 from sources.kleinanzeigen import KleinanzeigenSource
 from sources.bikemarkt import BikemarktSource
@@ -130,6 +130,19 @@ def quellen_abfragen(modell: dict) -> list[Listing]:
             treffer = [t for t in treffer if not ist_rahmen_only(t.title)]
             rahmen_only = vor_filter - len(treffer)
 
+            # match_exclude wird zentral hier statt in jedem einzelnen
+            # Quellen-Modul geprueft (score_title() kennt es zwar, aber die
+            # Quellen-Module reichen bislang nur match_required/match_boost
+            # durch) - siehe matcher.py fuer den Bulls/Kenevo/Rotwild-Fund,
+            # der match_exclude ueberhaupt noetig gemacht hat.
+            match_exclude = modell.get("match_exclude") or []
+            if match_exclude:
+                vor_ausschluss = len(treffer)
+                treffer = [t for t in treffer if not hat_ausschlusstoken(t.title, match_exclude)]
+                ausgeschlossen = vor_ausschluss - len(treffer)
+            else:
+                ausgeschlossen = 0
+
             min_preis = modell.get("min_price_eur")
             if min_preis is not None:
                 vor_preisfilter = len(treffer)
@@ -144,6 +157,8 @@ def quellen_abfragen(modell: dict) -> list[Listing]:
             hinweise = []
             if rahmen_only:
                 hinweise.append(f"{rahmen_only} Rahmen-only")
+            if ausgeschlossen:
+                hinweise.append(f"{ausgeschlossen} per match_exclude raus")
             if zu_guenstig:
                 hinweise.append(f"{zu_guenstig} unter {min_preis:.0f}€")
             hinweis = f" ({', '.join(hinweise)} rausgefiltert)" if hinweise else ""

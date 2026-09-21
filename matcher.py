@@ -89,22 +89,68 @@ def ist_rahmen_only(title: str) -> bool:
 
 REQUIRED_THRESHOLD = 75  # ab hier gilt ein Pflicht-Token als "im Titel enthalten"
 BOOST_THRESHOLD = 75
+EXCLUDE_THRESHOLD = 75
 BASE_SCORE = 50
 BOOST_PER_HIT = 10
 
+# Ziffern-haltige Pflicht-Tokens (Modellnummern wie "x275", "one44") werden
+# NICHT fuzzy, sondern als exakter (case-insensitiver) Teilstring geprueft -
+# am 21.09.2026 live gefunden: fuzz.partial_ratio("x275", ...) scored fuer
+# "R.X375", "R.X735", "R.X750" und "R.R275" (alles ANDERE, teils deutlich
+# schwerere Rotwild-Modelle) jeweils exakt 75 - GENAU auf der Schwelle, also
+# ein Fehltreffer bei jedem einzelnen dieser vier echten Nachbarmodelle.
+# Reine Wort-Tokens ("onfly", "exe", "sl", ...) bleiben bewusst fuzzy, weil
+# dort Tippfehler/Schreibweisen (Klein-/Grossschreibung, fehlende Doppelpunkte
+# etc.) toleriert werden sollen - das Risiko liegt spezifisch bei kurzen
+# Zahlenfolgen, die sich um eine Ziffer unterscheiden.
+_ENTHAELT_ZIFFER = re.compile(r"\d")
+_NICHT_ALPHANUMERISCH = re.compile(r"[^a-z0-9]")
 
-def score_title(title: str, match_required: list[str], match_boost: list[str]) -> float | None:
-    """None, wenn nicht ALLE match_required-Tokens (fuzzy) im Titel vorkommen.
-    Sonst ein Score 0-100: BASE_SCORE + BOOST_PER_HIT je getroffenem
+
+def _token_gefunden(token: str, title_l: str, threshold: int) -> bool:
+    if _ENTHAELT_ZIFFER.search(token):
+        # Trennzeichen raus (Punkt/Leerzeichen zwischen Buchstabe und Zahl
+        # sind ueblich, z.B. "R.X275" vs "RX 275" vs "X275" - alle meinen
+        # dasselbe Modell), erst danach exakter Teilstring-Vergleich.
+        token_klar = _NICHT_ALPHANUMERISCH.sub("", token.lower())
+        title_klar = _NICHT_ALPHANUMERISCH.sub("", title_l)
+        return token_klar in title_klar
+    return fuzz.partial_ratio(token.lower(), title_l) >= threshold
+
+
+def hat_ausschlusstoken(title: str, match_exclude: list[str]) -> bool:
+    """Fuer main.py's zentralen Post-Filter (analog ist_rahmen_only/
+    min_price_eur) - noetig, weil match_exclude nicht durch jedes einzelne
+    Quellen-Modul durchgereicht wird, siehe Kommentar in main.py."""
+    title_l = title.lower()
+    return any(_token_gefunden(token, title_l, EXCLUDE_THRESHOLD) for token in match_exclude)
+
+
+def score_title(
+    title: str,
+    match_required: list[str],
+    match_boost: list[str],
+    match_exclude: list[str] | None = None,
+) -> float | None:
+    """None, wenn nicht ALLE match_required-Tokens im Titel vorkommen (Ziffern-
+    Tokens exakt, sonst fuzzy) ODER wenn ein match_exclude-Token (fuzzy)
+    zutrifft - z.B. "kenevo" fuer das Modell "Specialized Turbo Levo SL", da
+    fuzz.partial_ratio("levo", "kenevo") = 75 (ebenfalls genau auf der
+    Schwelle) und Kenevo SL ein eigenstaendiges, anderes Specialized-Modell
+    ist. Sonst ein Score 0-100: BASE_SCORE + BOOST_PER_HIT je getroffenem
     Boost-Token (gedeckelt bei 100)."""
     title_l = title.lower()
 
     for token in match_required:
-        if fuzz.partial_ratio(token.lower(), title_l) < REQUIRED_THRESHOLD:
+        if not _token_gefunden(token, title_l, REQUIRED_THRESHOLD):
+            return None
+
+    for token in match_exclude or []:
+        if _token_gefunden(token, title_l, EXCLUDE_THRESHOLD):
             return None
 
     boost_hits = sum(
         1 for token in match_boost
-        if fuzz.partial_ratio(token.lower(), title_l) >= BOOST_THRESHOLD
+        if _token_gefunden(token, title_l, BOOST_THRESHOLD)
     )
     return min(100.0, BASE_SCORE + boost_hits * BOOST_PER_HIT)
