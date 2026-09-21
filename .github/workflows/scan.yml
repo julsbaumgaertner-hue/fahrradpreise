@@ -7,6 +7,11 @@ name: Taeglicher Preisscan
 # die das Preisradar-Artefakt direkt von raw.githubusercontent.com laedt -
 # kein lokaler Rechner und keine Cloud-Sandbox mit blockiertem Netzwerkzugriff
 # noetig, siehe scripts/scan_all.py.
+#
+# 6 parallele Shards statt einem sequenziellen Lauf: ein einzelner Lauf ueber
+# alle 17 Modelle brauchte live getestet ~90 Min (base_delay_s-Ratenlimit je
+# Quelle in sources/*.py) - mit 6 Shards a ~3 Modelle sinkt die Wandzeit auf
+# die Laufzeit des langsamsten Shards statt der Summe aller.
 on:
   schedule:
     - cron: "4 5 * * *"
@@ -18,14 +23,32 @@ permissions:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    timeout-minutes: 45
+    strategy:
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
       - run: pip install -r requirements.txt
-      - run: python scripts/scan_all.py
+      - run: python scripts/scan_all.py --shard ${{ matrix.shard }} --shards 6 --out-dir shard-out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: shard-${{ matrix.shard }}
+          path: shard-out
+
+  merge:
+    needs: scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: shard-*
+          path: shards
+      - run: python scripts/merge_shards.py shards/shard-*
       - name: Ergebnisse committen
         run: |
           git config user.name "fahrradpreise-bot"
