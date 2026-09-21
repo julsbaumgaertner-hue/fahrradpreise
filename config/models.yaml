@@ -96,12 +96,23 @@ models:
       - bulls
       - sonic
       - evo
+      - sx
     match_boost:
       - am
       - "sx-i"
       - sxi
     min_score: 55
     min_price_eur: 1000
+    # "sx" war bis 21.09.2026 nur match_boost, nicht match_required - dadurch
+    # sind massenhaft Angebote des ANDEREN, deutlich schwereren Bulls Sonic
+    # EVO AM 1/2/3/4 (ohne SX, Bosch CX Gen4, ~24-27kg) faelschlich unter
+    # diesem Modell gelandet (vom Nutzer per "Bulls Sonic EVO AM 3 Carbon"-
+    # Fund entdeckt, 26,7kg laut Haendler-Datenblatt fuer genau dieses
+    # Nicht-SX-Modell - passt zur bereits dokumentierten Verwechslungsgefahr
+    # in weight_reference.yaml). fuzz.partial_ratio("sx", titel) liefert
+    # sauber 100 fuer echte SX-Titel ("AM SX-I", "AM-SX 1") und 50 fuer die
+    # Nicht-SX-Trims ("AM 1".."AM 4", "AM-SL 1/2") - unter der 75er-Schwelle,
+    # live getestet, keine Fehltrennung in der Stichprobe.
 
   - id: flyer-uproc-slx
     display_name: "Flyer Uproc SL:X"
