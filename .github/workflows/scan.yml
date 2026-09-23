@@ -3,8 +3,7 @@ name: Taeglicher Preisscan
 # Laeuft taeglich automatisch (07:04 Europe/Berlin, aktuell UTC+2) und laesst
 # sich zusaetzlich manuell anstossen - auch aus der GitHub-App am Handy
 # (Repo -> Actions -> "Taeglicher Preisscan" -> "Run workflow"). Schreibt die
-# Ergebnisse nach public/scans_main.json + public/scans_kleinanzeigen.json,
-# die das Preisradar-Artefakt direkt von raw.githubusercontent.com laedt -
+# Ergebnisse nach public/scans_main.json, die das Preisradar-Artefakt direkt von raw.githubusercontent.com laedt -
 # kein lokaler Rechner und keine Cloud-Sandbox mit blockiertem Netzwerkzugriff
 # noetig, siehe scripts/scan_all.py.
 #
@@ -53,6 +52,6 @@ jobs:
         run: |
           git config user.name "fahrradpreise-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add public/scans_main.json public/scans_kleinanzeigen.json
+          git add public/scans_main.json
           git diff --staged --quiet || git commit -m "Taeglicher Preisscan $(date -u +%Y-%m-%d)"
           git push

@@ -2,11 +2,9 @@
 """
 Fuer den GitHub-Actions-Workflow (.github/workflows/scan.yml): scannt Modelle
 aus config/models.yaml ueber main.py's bestehende Pipeline (quellen_abfragen +
-gewicht_schaetzen, inkl. Rahmen-only-/Preisfilter) und schreibt zwei JSON-
-Dateien, die das Preisradar-Artefakt per fetch() direkt von
-raw.githubusercontent.com laedt:
-- scans_main.json: alle Quellen AUSSER kleinanzeigen.de
-- scans_kleinanzeigen.json: NUR kleinanzeigen.de
+gewicht_schaetzen, inkl. Rahmen-only-/Preisfilter) und schreibt
+scans_main.json, das das Preisradar-Artefakt per fetch() direkt von
+raw.githubusercontent.com laedt.
 
 Format je Eintrag: {model_id, display_name, abgefragt_am, anzahl_treffer,
 treffer[]} - exakt das Format, das SEED_SCANS im Artefakt erwartet.
@@ -64,32 +62,18 @@ def main() -> None:
     referenz = gewichtsreferenz_laden()
 
     scans_main: list[dict] = []
-    scans_kanz: list[dict] = []
 
     for modell in modelle:
         print(f"[Shard {args.shard}/{args.shards}] Scanne {modell['display_name']}...", file=sys.stderr)
-        scan = scan_modell(modell, referenz)
-        treffer = scan["treffer"]
-
-        scan_main = {**scan, "treffer": [t for t in treffer if t["source"] != "kleinanzeigen.de"]}
-        scan_main["anzahl_treffer"] = len(scan_main["treffer"])
-        scans_main.append(scan_main)
-
-        scan_kanz = {**scan, "treffer": [t for t in treffer if t["source"] == "kleinanzeigen.de"]}
-        scan_kanz["anzahl_treffer"] = len(scan_kanz["treffer"])
-        scans_kanz.append(scan_kanz)
+        scans_main.append(scan_modell(modell, referenz))
 
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "scans_main.json").write_text(
         json.dumps(scans_main, ensure_ascii=False), encoding="utf-8"
     )
-    (out_dir / "scans_kleinanzeigen.json").write_text(
-        json.dumps(scans_kanz, ensure_ascii=False), encoding="utf-8"
-    )
     print(
         f"[Shard {args.shard}/{args.shards}] "
-        f"{sum(s['anzahl_treffer'] for s in scans_main)} Treffer (ohne kleinanzeigen.de), "
-        f"{sum(s['anzahl_treffer'] for s in scans_kanz)} Treffer (kleinanzeigen.de)",
+        f"{sum(s['anzahl_treffer'] for s in scans_main)} Treffer",
         file=sys.stderr,
     )
 
