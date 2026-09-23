@@ -1,5 +1,12 @@
 """
-Quelle: bikeflip.com (Marktplatz fuer Fachhandel-Gebrauchtraeder).
+Quelle: bikeflip.com (Gebrauchtrad-Marktplatz, private UND gewerbliche
+Verkaeufer gemischt).
+
+Nur gewerbliche Verkaeufer (Haendler mit Gewaehrleistung): jede Anfrage
+geht mit seller=BUSINESS raus. Live geprueft am 23.09.2026 - der Filter
+greift serverseitig (Trek, Seite 1: BUSINESS vs. PRIVATE = 28 vs. 28
+Angebote, 0 Ueberschneidung). Die Items selbst haben kein Verkaeufer-Feld,
+ohne diesen Parameter liessen sich Privatangebote also nicht aussortieren.
 
 Struktur echt gegen die Live-Seite geprueft (Stand 2026-09-20):
 - Next.js mit klassischem __NEXT_DATA__ (kein RSC-Streaming wie bei
@@ -97,7 +104,7 @@ class BikeflipSource(Source):
     def _fetch_page(self, brand_id: int, page: int) -> list[dict]:
         resp = self._session.get(
             BASE_URL + SEARCH_PATH,
-            params={"bike_brand": brand_id, "page": page},
+            params={"bike_brand": brand_id, "seller": "BUSINESS", "page": page},
             timeout=15,
         )
         if resp.status_code in (403, 429):

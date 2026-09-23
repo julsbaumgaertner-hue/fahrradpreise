@@ -3,10 +3,13 @@
 main.py
 
 CLI-Einstiegspunkt: laedt config/models.yaml, ruft jede aktivierte Quelle
-auf (aktuell nur kleinanzeigen.de - weitere Quellen kommen als eigene Module
-in sources/ dazu, siehe Auftragstext: erst eine Quelle fertig, dann die
-naechste), gibt die Treffer sortiert als Tabelle aus und schreibt sie als
-JSON mit Zeitstempel nach results/.
+auf, gibt die Treffer sortiert als Tabelle aus und schreibt sie als JSON mit
+Zeitstempel nach results/.
+
+Nur gewerbliche Haendler mit Gewaehrleistung beim Kauf - Privatverkaeufer-
+Portale (kleinanzeigen.de, bikemarkt.mtb-news.de, buycycle.com, Vinted & Co.)
+bleiben bewusst komplett draussen (Entscheidung Juls, 23.09.2026). Gemischte
+Marktplaetze nur mit Haendler-Filter (siehe sources/bikeflip.py).
 
 Start:
     venv/bin/python3 main.py <modell-id>
@@ -29,9 +32,6 @@ from rich.table import Table
 
 from matcher import hat_ausschlusstoken, ist_rahmen_only
 from sources.base import Listing, ScraperBlocked
-from sources.kleinanzeigen import KleinanzeigenSource
-from sources.bikemarkt import BikemarktSource
-from sources.buycycle import BuycycleSource
 from sources.upway import UpwaySource
 from sources.jobrad import JobradSource
 from sources.moehrle import MoehrleSource
@@ -51,9 +51,6 @@ RESULTS_DIR = REPO / "results"
 # Jede Quelle hier eintragen, sobald ihr Modul steht - main.py ruft sie alle
 # der Reihe nach auf und faengt Fehler einzeln ab.
 SOURCES = [
-    KleinanzeigenSource(),
-    BikemarktSource(),
-    BuycycleSource(),
     UpwaySource(),
     JobradSource(),
     MoehrleSource(),

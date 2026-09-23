@@ -1,7 +1,7 @@
 """
 Gemeinsames Datenmodell + Basis-Klasse fuer alle Quellen-Module.
 
-Jede Quelle bekommt ihr eigenes Modul (kleinanzeigen.py, bikemarkt.py, ...)
+Jede Quelle bekommt ihr eigenes Modul (upway.py, rebike.py, ...)
 mit einer Klasse, die von Source erbt. main.py ruft jede Quelle in einem
 try/except auf - ein Fehler in einer Quelle (Timeout, Blockade, geaendertes
 HTML) darf die anderen Quellen nicht abschiessen, siehe run_source() in
